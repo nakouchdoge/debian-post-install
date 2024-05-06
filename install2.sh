@@ -34,7 +34,7 @@ if ask_yes_no "Change hostname?"; then
 else
 	echo "Skipping."
 fi
-
+#
 # Ask the user if they'd like to install docker. First we update the system, get the keyring for docker, add the
 # repository, and install the packages through apt.
 #
@@ -66,20 +66,8 @@ else
 	echo "Skipping docker installation."
 fi
 #
-# Ask the user if they'd like to install these packages.
+# User chosen or default basic packages.
 #
-#if ask_yes_no "Install packages?"; then
-#	echo "Installing default packages."
-#	sudo apt update && sudo apt upgrade -y
-#	sudo apt-get install ncdu htop neofetch ufw qemu-guest-agent nvim vim -y
-#	echo "Enabling qemu-guest-agent."
-#	sudo systemctl enable --now qemu-guest-agent.service
-#else
-#	echo "Skipping."
-#fi
-### Testing
-#
-# *TESTING* Attempt to make packages selectable
 if ask_yes_no "Install packages?"; then
 	if ask_yes_no "Install default packages?\n(ncdu, htop, ufw, qemu-guest-agent, nvim, vim, fzf)?"; then
 		echo "Installing default pacakges."
@@ -191,18 +179,18 @@ fi
 #
 # Ask user if they want to modify the default SSH port.
 #
-if ask_yes_no "Use a different default SSH port? (If no, port will default to 22)"; then
+if ask_yes_no "Change SSH port?"; then
 	read -p "Port to use for SSH: " ssh_port
 	echo "Changing default SSH port to $ssh_port."
 	if [ -f "/etc/ssh/sshd_config" ]; then
-		sudo sed -i 's/#Port 22/Port $ssh_port/' /etc/ssh/sshd_config
+#		sudo sed -i 's/#Port 22/Port $ssh_port/' /etc/ssh/sshd_config
+		sudo sed -i "s/.*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
 		echo "SSH changed to port $ssh_port"
 	else
 		echo "/etc/ssh/sshd_config does not exist. Something went wrong."
 	fi
 else
-	echo "Skipping. The SSH port will default to 22."
-	export ssh_port=22
+	echo "Skipping." 
 fi
 #
 # Add standard SSH security settings
@@ -212,7 +200,7 @@ if ask_yes_no "Change SSH security config?"; then
 	if [ -f "/etc/ssh/sshd_config.d/10-security.conf" ]; then
 		sudo mv /etc/ssh/sshd_config.d/10-security.conf /etc/ssh/sshd_config.d/10-security.conf.old
 		sudo touch /etc/ssh/sshd_config.d/10-security.conf
-		sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited"
+		sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
@@ -223,7 +211,7 @@ if ask_yes_no "Change SSH security config?"; then
 		echo "Backed up old 10-security.conf (10-security.conf.old) file and created a new one default rules"
 	else
 		sudo touch /etc/ssh/sshd_config.d/10-security.conf
-		sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited"
+		sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 		sudo echo "PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a

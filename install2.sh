@@ -75,7 +75,7 @@ if ask_yes_no "Install packages?"; then
 	if ask_yes_no "Install default packages? (ncdu, htop, ufw, qemu-guest-agent, nvim, vim, fzf)?"; then
 		echo "Installing default pacakges."
 		sudo apt update && sudo apt upgrade -y
-		sudo apt install ncdu htop ufw qemu-guest-agent nvim vim fzf -y
+		sudo apt install ncdu htop ufw qemu-guest-agent neovim vim fzf -y
 		echo "Enabling qemu-guest-agent."
 		sudo systemctl enable --now qemu-guest-agent.service
 	else

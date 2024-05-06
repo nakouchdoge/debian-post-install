@@ -26,6 +26,15 @@ ask_yes_no () {
 	done
 }
 #
+# Ask the user if they'd like to change the hostname of the machine.
+#
+if ask_yes_no "Change hostname?"; then
+	read -p "Enter new hostname: " new_hostname
+	sudo hostnamectl hostname $new_hostname
+else
+	echo "Skipping."
+fi
+
 # Ask the user if they'd like to install docker. First we update the system, get the keyring for docker, add the
 # repository, and install the packages through apt.
 #
@@ -72,7 +81,7 @@ fi
 #
 # *TESTING* Attempt to make packages selectable
 if ask_yes_no "Install packages?"; then
-	if ask_yes_no "Install default packages? (ncdu, htop, ufw, qemu-guest-agent, nvim, vim, fzf)?"; then
+	if ask_yes_no "Install default packages?\n(ncdu, htop, ufw, qemu-guest-agent, nvim, vim, fzf)?"; then
 		echo "Installing default pacakges."
 		sudo apt update && sudo apt upgrade -y
 		sudo apt install ncdu htop ufw qemu-guest-agent neovim vim fzf -y

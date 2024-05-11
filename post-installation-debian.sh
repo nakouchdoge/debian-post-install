@@ -30,7 +30,7 @@ ask_yes_no () {
 #
 if ask_yes_no "Change hostname?"; then
 	read -p "Enter new hostname: " new_hostname
-	if [ -f "/etc/hostname" ] && pacman -Q | grep -qF systemd; then
+	if [ -f "/etc/hostname" ] && which systemd; then 
 		sudo hostnamectl hostname $new_hostname
 	else
 		echo "Hostname file doesn't exist. Something went wrong."
@@ -78,12 +78,12 @@ fi
 # User chosen or default basic packages.
 #
 if ask_yes_no "Install packages?"; then
-	if ask_yes_no "Install default packages? (neovim htop neofetch ncdu qemu-guest-agent git openssh)?"; then
+	if ask_yes_no "Install default packages? (neovim htop neofetch ncdu qemu-guest-agent git openssh-server)?"; then
 		echo "Installing default pacakges."
-		sudo apt install neovim htop neofetch ncdu qemu-guest-agent git openssh
+		sudo apt install neovim htop neofetch ncdu qemu-guest-agent git openssh-server
 		if ask_yes_no "Install more packages?"; then
 			read -p "Type the packages you would like to install (separated by a single space): " packages_to_install
-			sudo pacman -S $packages_to_install
+			sudo apt install -S $packages_to_install
 		else
 			:
 		fi

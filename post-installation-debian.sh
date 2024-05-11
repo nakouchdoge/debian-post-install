@@ -128,18 +128,19 @@ if apt list --installed | grep -qF neovim; then
 else
 	:
 fi
-
+#
 # *TESTING*
 #
 # Ask to install the custom bash prompt. This is a "debian red" prompt.
 #
 if ask_yes_no "Add custom red bash prompt?"; then
-	echo "Adding custom red bash prompt."
 	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1='/[\e" "/home/$USER/.bashrc"; then
 		cp /home/$USER/.bashrc /home/$USER/.bashrc.old
 		awk '{if ($0 ~ /PS1/} print "PS1='\''\[\\e[91m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[38;5;38m\\]\\w\\[\\e[0m\\]\\$ '\''"; else print}' /home/$USER/.bashrc > tmpfile && mv tmpfile /home/$USER/.bashrc
+		echo "Backed up old .bashrc file and added custom bash prompt."
 	elif [ -f "/home/$USER/.bashrc" ]; then
 		echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+		echo "Added custom bash prompt."
 	else
 		echo ".bashrc does not exist. Something went wrong."
 	fi

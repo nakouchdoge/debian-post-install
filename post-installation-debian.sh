@@ -313,6 +313,14 @@ else
 	echo "..."
 fi
 
-echo "****END OF SCRIPT****"
+if ask_yes_no "Clone nvim configuration from git?"; then
+	git clone https://github.com/nakouchdoge/nvim /home/$USER/.config/nvim
+	echo "Git repository nakouchdoge/nvim has been cloned"
+else
+	echo "Skipping."
+fi
+
 bash
+echo "New bash session started."
+echo "****END OF SCRIPT****"
 exit

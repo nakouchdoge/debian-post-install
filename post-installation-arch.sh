@@ -210,6 +210,7 @@ if ask_yes_no "Change SSH port?"; then
 	read -p "Port to use for SSH: " ssh_port
 	echo "Changing default SSH port to $ssh_port."
 	if [ -f "/etc/ssh/sshd_config" ]; then
+		sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 		sudo sed -i "s/.*Port [0-9]*/Port $ssh_port/" /etc/ssh/sshd_config
 		echo "SSH changed to port $ssh_port"
 	else
@@ -298,6 +299,14 @@ else
 	echo "..."
 fi
 
-echo "****END OF SCRIPT****"
+if ask_yes_no "Clone nvim configuration from git?"; then
+	git clone https://github.com/nakouchdoge/nvim /home/$USER/.config/nvim
+	echo "Git repository nakouchdoge/nvim has been cloned"
+else
+	echo "Skipping."
+fi
+
 bash
+echo "New bash session started."
+echo "****END OF SCRIPT****"
 exit

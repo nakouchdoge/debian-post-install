@@ -131,15 +131,15 @@ fi
 #
 # *TESTING*
 #
-# echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 # Ask to install the custom bash prompt. This is a "debian red" prompt.
 #
-if ask_yes_no "Add custom arch bash prompt?"; then
+if ask_yes_no "Add custom debian bash prompt?"; then
 #	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1" "/home/$USER/.bashrc"; then
 	if [ -f "/home/$USER/.bashrc" ]; then
 		if [ -f "/home/$USER/.bash_prompt" ]; then
 			mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
-			echo "PS1='\[\e[96m\]\u\[\e[96m\]@\[\e[96m\]\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
+			echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 			echo ".bash_prompt backed up and custom prompt added"
 			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
 				echo "Custom prompt source file exists in .bashrc. Skipping."
@@ -149,7 +149,7 @@ if ask_yes_no "Add custom arch bash prompt?"; then
 			fi
 		else
 			touch /home/$USER/.bash_prompt
-			echo "PS1='\[\e[96m\]\u\[\e[96m\]@\[\e[96m\]\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
+			echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
 				echo "Custom prompt source file exists in .bashrc. Skipping."
 			else

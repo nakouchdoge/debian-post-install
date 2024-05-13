@@ -113,36 +113,69 @@ if apt list --installed | grep -qF docker; then
 	fi
 fi
 
-if apt list --installed | grep -qF neovim; then
-	if ask_yes_no "NeoVIM installation detected, do you want 'v' 'vi' and 'vim' to be aliases for the 'nvim' command?"; then
-		if grep "alias vi='nvim'" /home/$USER/.bashrc && grep "alias vim='nvim'" /home/$USER/.bashrc && grep "alias v='nvim'" /home/$USER/.bashrc; then
-			echo "Aliases already exist. Skipping."
-		else
-			echo "alias vi='nvim'" >> /home/$USER/.bashrc
-			echo "alias vim='nvim'" >> /home/$USER/.bashrc
-			echo "alias v='nvim'" >> /home/$USER/.bashrc
-		fi
+if [ -f "/usr/bin/nvim" ]; then
+	if [ -f "/home/$USER/.bash_aliases" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc" && grep -qF "alias v='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vi='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vim='nvim'" "/home/$USER/.bash_aliases"; then
+		:
 	else
-		echo "Skipping."
+		if ask_yes_no "NeoVIM installation detected, do you want 'v', 'vi', and 'vim' commands to be aliased to the 'nvim' command?"; then
+			if [ -f "/home/$USER/.bash_aliases" ]; then
+				echo >> "alias v='nvim'" >> /home/$USER/.bash_aliases
+				echo >> "alias vi='nvim'" >> /home/$USER/.bash_aliases
+				echo >> "alias vim='nvim'" >> /home/$USER/.bash_aliases
+				"~/.bash_aliases file modified."
+				if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases"; then
+					echo "~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified."
+				else
+					echo "source /home/$USER/.bash_aliases" >> /home/$USER/.bashrc
+					echo "~/.bashrc now points to ~/.bash_aliases, ~/.bashrc has been modified."
+				fi
+			else
+				touch /home/$USER/.bash_aliases
+				echo >> "alias v='nvim'" >> /home/$USER/.bash_aliases
+				echo >> "alias vi='nvim'" >> /home/$USER/.bash_aliases
+				echo >> "alias vim='nvim'" >> /home/$USER/.bash_aliases
+				echo "~/.bash_aliases file created and aliases added."
+				if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases"; then
+					echo "~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified."
+				else
+					echo "source /home/$USER/.bash_aliases" >> /home/$USER/.bashrc
+					echo "~/.bashrc now points to ~/.bash_aliases, ~/.bashrc has been modified."
+				fi
+			fi
+		else
+			echo "Skipping."
+		fi
 	fi
 else
 	:
 fi
+
+#if apt list --installed | grep -qF neovim; then
+#	if ask_yes_no "NeoVIM installation detected, do you want 'v' 'vi' and 'vim' to be aliases for the 'nvim' command?"; then
+#		if grep "alias vi='nvim'" /home/$USER/.bashrc && grep "alias vim='nvim'" /home/$USER/.bashrc && grep "alias v='nvim'" /home/$USER/.bashrc; then
+#			echo "Aliases already exist. Skipping."
+#		else
+#			echo "alias vi='nvim'" >> /home/$USER/.bashrc
+#			echo "alias vim='nvim'" >> /home/$USER/.bashrc
+#			echo "alias v='nvim'" >> /home/$USER/.bashrc
+#		fi
+#	else
+#		echo "Skipping."
+#	fi
+#else
+#	:
+#fi
 #
-# *TESTING*
-#
-echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 # Ask to install the custom bash prompt. This is a "debian red" prompt.
 #
 if ask_yes_no "Add custom debian bash prompt?"; then
-#	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1" "/home/$USER/.bashrc"; then
 	if [ -f "/home/$USER/.bashrc" ]; then
 		if [ -f "/home/$USER/.bash_prompt" ]; then
 			mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
 			echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 			echo ".bash_prompt backed up and custom prompt added"
 			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
-				echo "Custom prompt source file exists in .bashrc. Skipping."
+				echo "Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified."
 			else
 				echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
 				echo "Added source line to .bashrc"
@@ -150,33 +183,20 @@ if ask_yes_no "Add custom debian bash prompt?"; then
 		else
 			touch /home/$USER/.bash_prompt
 			echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+			echo "Created ~/.bash_prompt"
 			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
-				echo "Custom prompt source file exists in .bashrc. Skipping."
+				echo "Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified."
 			else
 				echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
 				echo "Added source line to .bashrc"
 			fi
 		fi
 	else
-		echo ".bashrc ddoes not exist! Something went wrong."
+		echo "~/.bashrc does not exist! Something went wrong."
 	fi
 else
 	echo "Skipping."
 fi
-#if ask_yes_no "Add custom red bash prompt?"; then
-#	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1='/[\e" "/home/$USER/.bashrc"; then
-#		cp /home/$USER/.bashrc /home/$USER/.bashrc.old
-#		awk '{if ($0 ~ /PS1/} print "PS1='\''\[\\e[91m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[38;5;38m\\]\\w\\[\\e[0m\\]\\$ '\''"; else print}' /home/$USER/.bashrc > tmpfile && mv tmpfile /home/$USER/.bashrc
-#		echo "Backed up old .bashrc file and added custom bash prompt."
-#	elif [ -f "/home/$USER/.bashrc" ]; then
-#		echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
-#		echo "Added custom bash prompt."
-#	else
-#		echo ".bashrc does not exist. Something went wrong."
-#	fi
-#else
-#	echo "Skipping."
-#fi
 #
 # Ask the user if they'd like to add an automatic session timeout in a user defined number of seconds.
 #

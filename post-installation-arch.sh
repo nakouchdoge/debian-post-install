@@ -147,12 +147,6 @@ if ask_yes_no "Add custom arch bash prompt?"; then
 else
 	echo "Skipping."
 fi
-#		cp /home/$USER/.bashrc /home/$USER/.bashrc.old
-#		awk '{if ($0 ~ /PS1/) print "PS1='\''\\[\\e[96m\\]\\u\\[\\e[96m\\]@\\[\\e[96m\\]\\h\\[\\e[0m\\]:\\[\\e[38;5;38m\\]\\w\\[\\e[0m\\]\\$ '\''"; else print}' /home/$USER/.bashrc > tmpfile && mv tmpfile /home/$USER/.bashrc
-#		echo "Backed up old .bashrc file and added custom bash prompt."
-#	elif [ -f "/home/$USER/.bashrc" ]; then
-#		echo "PS1='\[\e[96m\]\u\[\e[96m\]@\[\e[96m\]\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
-#		echo "Added custom bash prompt."
 #
 # Ask the user if they'd like to add an automatic session timeout in a user defined number of seconds.
 #

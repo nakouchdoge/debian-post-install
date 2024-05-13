@@ -357,7 +357,5 @@ else
 	echo "Skipping."
 fi
 
-bash
-echo "New bash session started."
-echo "****END OF SCRIPT****"
+echo "****END OF SCRIPT**** Log out and log back in for changes to take effect."
 exit

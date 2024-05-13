@@ -131,22 +131,52 @@ fi
 #
 # *TESTING*
 #
+# echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
 # Ask to install the custom bash prompt. This is a "debian red" prompt.
 #
-if ask_yes_no "Add custom red bash prompt?"; then
-	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1='/[\e" "/home/$USER/.bashrc"; then
-		cp /home/$USER/.bashrc /home/$USER/.bashrc.old
-		awk '{if ($0 ~ /PS1/} print "PS1='\''\[\\e[91m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[38;5;38m\\]\\w\\[\\e[0m\\]\\$ '\''"; else print}' /home/$USER/.bashrc > tmpfile && mv tmpfile /home/$USER/.bashrc
-		echo "Backed up old .bashrc file and added custom bash prompt."
-	elif [ -f "/home/$USER/.bashrc" ]; then
-		echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
-		echo "Added custom bash prompt."
+if ask_yes_no "Add custom arch bash prompt?"; then
+#	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1" "/home/$USER/.bashrc"; then
+	if [ -f "/home/$USER/.bashrc" ]; then
+		if [ -f "/home/$USER/.bash_prompt" ]; then
+			mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
+			echo "PS1='\[\e[96m\]\u\[\e[96m\]@\[\e[96m\]\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
+			echo ".bash_prompt backed up and custom prompt added"
+			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
+				echo "Custom prompt source file exists in .bashrc. Skipping."
+			else
+				echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
+				echo "Added source line to .bashrc"
+			fi
+		else
+			touch /home/$USER/.bash_prompt
+			echo "PS1='\[\e[96m\]\u\[\e[96m\]@\[\e[96m\]\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
+			if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
+				echo "Custom prompt source file exists in .bashrc. Skipping."
+			else
+				echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
+				echo "Added source line to .bashrc"
+			fi
+		fi
 	else
-		echo ".bashrc does not exist. Something went wrong."
+		echo ".bashrc ddoes not exist! Something went wrong."
 	fi
 else
 	echo "Skipping."
 fi
+#if ask_yes_no "Add custom red bash prompt?"; then
+#	if [ -f "/home/$USER/.bashrc" ] && grep -qF "PS1='/[\e" "/home/$USER/.bashrc"; then
+#		cp /home/$USER/.bashrc /home/$USER/.bashrc.old
+#		awk '{if ($0 ~ /PS1/} print "PS1='\''\[\\e[91m\\]\\u@\\h\\[\\e[0m\\]:\\[\\e[38;5;38m\\]\\w\\[\\e[0m\\]\\$ '\''"; else print}' /home/$USER/.bashrc > tmpfile && mv tmpfile /home/$USER/.bashrc
+#		echo "Backed up old .bashrc file and added custom bash prompt."
+#	elif [ -f "/home/$USER/.bashrc" ]; then
+#		echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+#		echo "Added custom bash prompt."
+#	else
+#		echo ".bashrc does not exist. Something went wrong."
+#	fi
+#else
+#	echo "Skipping."
+#fi
 #
 # Ask the user if they'd like to add an automatic session timeout in a user defined number of seconds.
 #

@@ -122,7 +122,7 @@ if [ -f "/usr/bin/nvim" ]; then
 				echo >> "alias v='nvim'" >> /home/$USER/.bash_aliases
 				echo >> "alias vi='nvim'" >> /home/$USER/.bash_aliases
 				echo >> "alias vim='nvim'" >> /home/$USER/.bash_aliases
-				"~/.bash_aliases file modified."
+				echo "~/.bash_aliases file modified."
 				if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases"; then
 					echo "~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified."
 				else

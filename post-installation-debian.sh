@@ -119,9 +119,9 @@ if [ -f "/usr/bin/nvim" ]; then
 	else
 		if ask_yes_no "NeoVIM installation detected, do you want 'v', 'vi', and 'vim' commands to be aliased to the 'nvim' command?"; then
 			if [ -f "/home/$USER/.bash_aliases" ]; then
-				echo >> "alias v='nvim'" >> /home/$USER/.bash_aliases
-				echo >> "alias vi='nvim'" >> /home/$USER/.bash_aliases
-				echo >> "alias vim='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias v='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias vi='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias vim='nvim'" >> /home/$USER/.bash_aliases
 				echo "~/.bash_aliases file modified."
 				if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases"; then
 					echo "~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified."
@@ -131,9 +131,9 @@ if [ -f "/usr/bin/nvim" ]; then
 				fi
 			else
 				touch /home/$USER/.bash_aliases
-				echo >> "alias v='nvim'" >> /home/$USER/.bash_aliases
-				echo >> "alias vi='nvim'" >> /home/$USER/.bash_aliases
-				echo >> "alias vim='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias v='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias vi='nvim'" >> /home/$USER/.bash_aliases
+				echo "alias vim='nvim'" >> /home/$USER/.bash_aliases
 				echo "~/.bash_aliases file created and aliases added."
 				if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases"; then
 					echo "~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified."

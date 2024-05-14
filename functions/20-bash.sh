@@ -18,7 +18,7 @@ function bashPrompt {
 		if [ -f "/home/$USER/.bashrc" ]; then
 			if [ -f "/home/$USER/.bash_prompt" ]; then
 				mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
-				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
 				echo "${green}.bash_prompt backed up and custom prompt added${cr}"
 				if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
 					echo "${green}Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified.${cr}"
@@ -28,7 +28,7 @@ function bashPrompt {
 				fi
 			else
 				touch /home/$USER/.bash_prompt
-				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bashrc
+				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
 				echo "${green}Created ~/.bash_prompt${cr}"
 				if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
 					echo "${green}Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified.${cr}"
@@ -66,6 +66,6 @@ function bashTimeout {
 				echo "${red}.bashrc does not exist. Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping console timeout setting.${cr}"
+		echo "${grey}Skipping.${cr}"
 	fi
 }

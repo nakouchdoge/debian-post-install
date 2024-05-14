@@ -12,7 +12,7 @@ cr=$'\e[0m'
 
 function welcomeMessage {
 	echo "Welcome to nakouchdoge's post-install script for Debian"
-	echo "${green}Version 0.1${cr}"
+	echo "${green}Version 0.2${cr}"
 }
 
 function changeHostname {
@@ -61,3 +61,37 @@ function nvimConfig {
 		echo "${grey}Skipping.${cr}"
 	fi
 }
+
+function nvimEnsureConfig {
+	if grep -qF "https://github.com/nakouchdoge/nvim" "/home/$USER/.config/nvim/.git/config"; then
+		if ask_yes_no "${purple}:: Check if configuration is correct for nvim to work properly?${cr}"; then
+			if [ -f "/usr/bin/gcc" ] || [ -f "/usr/bin/cc" ] || [ -f "/usr/bin/clang" ] || [ -f "/usr/bin/cl" ] || [ -f "/usr/bin/zig" ]; then
+				echo "${green}Found C Compiler${cr}"
+			else
+				if ask_yes_no "${red}:: No C compiler found, install GCC?${cr}"; then
+					sudo apt install gcc -y
+				else
+					echo "${grey}Skipping.${cr}"
+				fi
+			fi
+			if [ -d "/nix" ]; then
+				echo "${green}Found Nix Shell${cr}"
+			else
+				if ask_yes_no "${red}:: Nix shell not found, install now?${cr}"; then
+					curl -L https://nixos.org/nix/install | sh
+					if [ -d "/nix" ]; then
+						echo "${green}Success${cr}"
+					else
+						echo "${red}Something went wrong.${cr}"
+					fi
+				fi
+			fi
+			if nvim --version | grep -qF 0.9.; then
+				echo "${green}Found NeoVIM Version 0.9+${cr}"
+			else
+				echo "${red}You might be running an older version of neovim, if you run into issues, consider updating.${cr}"
+			fi
+		fi
+	fi
+}
+

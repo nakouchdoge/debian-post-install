@@ -31,8 +31,8 @@ function sshAuthorizedKeys {
 			echo "${green}Moved old authorized_keys file to authorized_keys.old${cr}"
 		else
 			echo "${green}Creating authorized_keys file${cr}"
+			touch /home/$USER/.ssh/authorized_keys
 		fi
-		touch /home/$USER/.ssh/authorized_keys
 		sudo chown -R $USER /home/$USER/.ssh
 		ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"
 		ssh_key_setup

@@ -5,6 +5,8 @@
 ### Fixed
 
 - Fixed the wrong function being called in 30-ssh.sh (Was calling ssh_key_setup instead of sshKeySetup)
+- Added missing "fi" statement in 30-ssh.sh line 43
+- Added warning to not run the script as root.
 
 ## [0.2] - 2024-05-14
 

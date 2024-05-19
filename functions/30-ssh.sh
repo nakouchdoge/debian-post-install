@@ -27,15 +27,20 @@ function sshAuthorizedKeys {
 	if ask_yes_no "${purple}:: Modify authorized SSH keys? This will create a backup of ~/.ssh/authorized_keys and create a new one. ${cr}"; then
 		echo "${purple}Creating ~/.ssh/authorized_keys${cr}"
 		if [ -f "/home/$USER/.ssh/authorized_keys" ]; then
-			mv /home/$USER/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys.old
-			echo "${green}Moved old authorized_keys file to authorized_keys.old${cr}"
+			cp /home/$USER/.ssh/authorized_keys /home/$USER/.ssh/authorized_keys.old
+			echo "${green}Copied authorized_keys file to authorized_keys.old${cr}"
 		else
 			echo "${green}Creating authorized_keys file${cr}"
 			touch /home/$USER/.ssh/authorized_keys
 		fi
 		sudo chown -R $USER /home/$USER/.ssh
+		if [ -o "/home/$USER/.ssh" ]; then
+			echo "${green}Success${cr}"
+		else
+			echo "${red}Check permissions of /home/$USER/.ssh directory.${cr}"
 		ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"
 		sshKeySetup
+		fi
 	else
 		echo "${grey}Skipping.${cr}"
 	fi

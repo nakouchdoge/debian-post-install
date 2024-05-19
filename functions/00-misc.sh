@@ -12,7 +12,9 @@ cr=$'\e[0m'
 
 function welcomeMessage {
 	echo "Welcome to nakouchdoge's post-install script for Debian"
-	echo "${green}Version 0.2${cr}"
+	echo "${green}Version 0.2.1${cr}"
+	echo ""
+	echo "${red}Do not run this script as root.${cr}"
 }
 
 function changeHostname {

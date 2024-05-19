@@ -35,7 +35,7 @@ function sshAuthorizedKeys {
 		fi
 		sudo chown -R $USER /home/$USER/.ssh
 		ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"
-		ssh_key_setup
+		sshKeySetup
 	else
 		echo "${grey}Skipping.${cr}"
 	fi

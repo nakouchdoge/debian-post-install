@@ -1,5 +1,11 @@
 # ChangeLog
 
+## [0.2.1] - 2024-05-19
+
+### Fixed
+
+- Fixed the wrong function being called in 30-ssh.sh (Was calling ssh_key_setup instead of sshKeySetup)
+
 ## [0.2] - 2024-05-14
 
 ### Added

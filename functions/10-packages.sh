@@ -32,9 +32,11 @@ function switchRelease {
 				case $releaseSelection in
 					"Testing")
 						sudo sed -i "s/bookworm/testing/" /etc/apt/sources.list
+						break
 						;;	
 					"Unstable")
 						sudo sed -i "s/bookworm/unstable/" /etc/apt/sources.list
+						break
 						;;
 					"Quit")
 						break

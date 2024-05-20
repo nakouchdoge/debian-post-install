@@ -21,7 +21,6 @@ cr=$'\e[0m'
 
 welcomeMessage
 machineInfo
-switchRelease
 
 function main {
 	PS3="${green}:: Make a selection (Press ENTER to see options): ${cr}"
@@ -33,6 +32,7 @@ function main {
 		"Modify SSH" 
 		"Modify Firewall" 
 		"Install NeoVIM Config" 
+		"Switch release version"
 		"Quit"
 	)
 	select userSelection in "${userChoices[@]}"; do
@@ -78,6 +78,9 @@ function main {
 			"Install NeoVIM Config")
 				nvimConfig
 				nvimEnsureConfig
+				;;
+			"Switch release version")
+				switchRelease
 				;;
 			"Quit")
 				break

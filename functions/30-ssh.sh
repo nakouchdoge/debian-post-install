@@ -33,7 +33,8 @@ function sshAuthorizedKeys {
 			echo "${green}Creating authorized_keys file${cr}"
 			touch /home/$USER/.ssh/authorized_keys
 		fi
-		sudo chown -R $USER /home/$USER/.ssh
+		export usergroupID=$(grep "$USER" "/etc/passwd" | grep -oP "[0-9]+:[0-9]+")
+		sudo chown -R $usergroupID /home/$USER/.ssh
 		if [ -o "/home/$USER/.ssh" ]; then
 			echo "${green}Success${cr}"
 		else

@@ -11,6 +11,7 @@
 
 - Was trying to enable sshd.service in 10-packages.sh function detectPackagesInstalled and changed it to read "ssh.service" to prevent errors if the symbolic link exists between ssh.service and sshd.service.
 - Fixed function sshAuthorizedKeys in 30-ssh.sh when asking a user to input SSH keys, no if statement existed.
+- Fixed checking of .ssh directory ownership. Previously only the user was set, not group. Using grep to find user and group IDs and applying IDs to chown command.
 
 ## [0.2.1] - 2024-05-19
 

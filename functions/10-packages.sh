@@ -28,7 +28,7 @@ function switchRelease {
 				"Unstable"
 				"Quit"
 			)
-			select releaseSelection in "{$releaseSelections[@]}"; do
+			select releaseSelection in "${releaseSelections[@]}"; do
 				case $releaseSelection in
 					"Testing")
 						sudo sed -i "s/bookworm/testing/" /etc/apt/sources.list

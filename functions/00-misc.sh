@@ -10,6 +10,11 @@ green=$'\e[32m'
 grey=$'\e[90m'
 cr=$'\e[0m'
 
+function machineInfo {
+	export codename=$(grep -oP "(?<=VERSION_CODENAME=)\w+" "/etc/os-release")
+	echo OS Release Codename: $codename
+}
+
 function welcomeMessage {
 	echo "Welcome to nakouchdoge's post-install script for Debian"
 	echo "${green}Version 0.2.1${cr}"

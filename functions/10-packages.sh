@@ -19,6 +19,48 @@ function aptUpdate {
 	fi
 }
 
+function switchRelease {
+	if [ $codename = bookworm ]; then
+		if ask_yes_no "${purple}:: Switch Debian releases? (Switch to testing or unstable?): ${cr}"; then
+			PS3="${green}:: Make a selection: ${cr}"
+			releaseSelections=(
+				"Testing"
+				"Unstable"
+				"Quit"
+			)
+			select releaseSelection in "{$releaseSelections[@]}"; do
+				case $releaseSelection in
+					"Testing")
+						sudo sed -i "s/bookworm/testing/" /etc/apt/sources.list
+						;;	
+					"Unstable")
+						sudo sed -i "s/bookworm/unstable/" /etc/apt/sources.list
+						;;
+					"Quit")
+						break
+						;;
+					*)
+						echo "${red}Invalid Option.${cr}"
+						;;
+				esac
+			done
+			if [ $releaseSelection = Testing || $releaseSelection = Unstable ]; then
+				if ask_yes_no "${purple}:: Update && Upgrade system now?${cr}"; then
+					sudo apt update && sudo apt upgrade -y
+				else
+					echo "${grey}Skipping.${cr}"
+				fi
+			else
+				:
+			fi
+		else
+			echo "${grey}Skipping.${cr}"
+		fi
+	else
+		:
+	fi
+}
+
 function installDocker {
 	if ask_yes_no "${purple}:: Install docker? ${cr}"; then
 		echo "${purple}Installing docker engine${cr}"

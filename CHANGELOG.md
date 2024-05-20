@@ -1,5 +1,12 @@
 # ChangeLog
 
+## [0.2.2] - 2024-05-19
+
+### Added
+
+- New function machineInfo in 00-misc.sh to get version codename.
+- New function switchRelease in 10-packages.sh which asks user if they want to switch update trains on Debian.
+
 ## [0.2.1] - 2024-05-19
 
 ### Fixed

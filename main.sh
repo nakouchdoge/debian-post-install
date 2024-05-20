@@ -20,6 +20,8 @@ grey=$'\e[90m'
 cr=$'\e[0m'
 
 welcomeMessage
+machineInfo
+switchRelease
 
 function main {
 	PS3="${green}:: Make a selection (Press ENTER to see options): ${cr}"

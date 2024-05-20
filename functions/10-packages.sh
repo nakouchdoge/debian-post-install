@@ -46,7 +46,7 @@ function switchRelease {
 						;;
 				esac
 			done
-			if [ $releaseSelection = Testing || $releaseSelection = Unstable ]; then
+			if [ $releaseSelection = Testing ] || [ $releaseSelection = Unstable ]; then
 				if ask_yes_no "${purple}:: Update && Upgrade system now?${cr}"; then
 					sudo apt update && sudo apt upgrade -y
 				else

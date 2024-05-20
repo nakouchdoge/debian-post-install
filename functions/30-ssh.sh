@@ -82,7 +82,6 @@ function sshSecurity {
 			sudo echo "PubkeyAuthentication yes" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			sudo echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			sudo echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "Port $ssh_port" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			echo "${green}Backed up old 10-security.conf (10-security.conf.old) file and created a new one default rules${cr}"
 		else
 			sudo touch /etc/ssh/sshd_config.d/10-security.conf
@@ -93,7 +92,6 @@ function sshSecurity {
 			sudo echo "PubkeyAuthentication yes" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			sudo echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			sudo echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "Port $ssh_port" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
 			echo "${green}Created 10-security.conf file with default rules${cr}"
 		fi
 	else

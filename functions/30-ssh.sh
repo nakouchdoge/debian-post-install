@@ -35,7 +35,7 @@ function sshAuthorizedKeys {
 		fi
 		export usergroupID=$(grep "$USER" "/etc/passwd" | grep -oP "[0-9]+:[0-9]+")
 		sudo chown -R $usergroupID /home/$USER/.ssh
-		if [ -o "/home/$USER/.ssh" ]; then
+		if [ -O "/home/$USER/.ssh" ]; then
 			echo "${green}Success${cr}"
 		else
 			echo "${red}Check permissions of /home/$USER/.ssh directory.${cr}"

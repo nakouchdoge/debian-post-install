@@ -13,6 +13,7 @@
 - Fixed function sshAuthorizedKeys in 30-ssh.sh when asking a user to input SSH keys, no if statement existed.
 - Fixed checking of .ssh directory ownership. Previously only the user was set, not group. Using grep to find user and group IDs and applying IDs to chown command.
 - Fixed SSH port change function from defaulting back to port 22 if the user chose to not change their port. Now the port will not be changed at all if you answer no, regardless of what it's set to.
+- Check if directory is owned by USER:GROUP syntax wrong in 30-ssh.sh, fixed.
 
 ## [0.2.1] - 2024-05-19
 

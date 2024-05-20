@@ -116,8 +116,8 @@ function installPackages {
 
 function detectPackagesInstalled {
 	if [ -f "/usr/sbin/sshd" ]; then 
-		if ask_yes_no "${purple}:: OpenSSH installation detected, enable now? ${cr}"; then
-			sudo systemctl enable --now sshd
+		if ask_yes_no "${purple}:: OpenSSH installation detected, start now? ${cr}"; then
+			sudo systemctl start ssh.service
 			echo "${green}Success${cr}"
 		else
 			echo "${grey}Skipping.${cr}"

@@ -38,8 +38,11 @@ function sshAuthorizedKeys {
 			echo "${green}Success${cr}"
 		else
 			echo "${red}Check permissions of /home/$USER/.ssh directory.${cr}"
-		ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"
-		sshKeySetup
+		fi
+		if ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"; then
+			sshKeySetup
+		else
+			echo "${grey}Skipping.${cr}"
 		fi
 	else
 		echo "${grey}Skipping.${cr}"

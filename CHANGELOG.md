@@ -7,6 +7,11 @@
 - New function machineInfo in 00-misc.sh to get version codename.
 - New function switchRelease in 10-packages.sh which asks user if they want to switch update trains on Debian.
 
+### Fixed
+
+- Was trying to enable sshd.service in 10-packages.sh function detectPackagesInstalled and changed it to read "ssh.service" to prevent errors if the symbolic link exists between ssh.service and sshd.service.
+- Fixed function sshAuthorizedKeys in 30-ssh.sh when asking a user to input SSH keys, no if statement existed.
+
 ## [0.2.1] - 2024-05-19
 
 ### Fixed

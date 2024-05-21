@@ -19,34 +19,38 @@ function aptUpdate {
 	fi
 }
 
+function selectReleaseVersion {
+		PS3="${green}:: Make a selection: ${cr}"
+		releaseSelections=(
+			"Testing"
+			"Unstable"
+			"Quit"
+		)
+		select releaseSelection in "${releaseSelections[@]}"; do
+			case $releaseSelection in
+				"Testing")
+					sudo sed -i "s/bookworm/testing/" /etc/apt/sources.list
+					break
+					;;	
+				"Unstable")
+					sudo sed -i "s/bookworm/unstable/" /etc/apt/sources.list
+					break
+					;;
+				"Quit")
+					break
+					;;
+				*)
+					echo "${red}Invalid Option.${cr}"
+					;;
+			esac
+		done
+}
+
 function switchRelease {
 	if [ $codename = bookworm ]; then
 		if ask_yes_no "${purple}:: Switch Debian releases? (Switch to testing or unstable?): ${cr}"; then
-			PS3="${green}:: Make a selection: ${cr}"
-			releaseSelections=(
-				"Testing"
-				"Unstable"
-				"Quit"
-			)
-			select releaseSelection in "${releaseSelections[@]}"; do
-				case $releaseSelection in
-					"Testing")
-						sudo sed -i "s/bookworm/testing/" /etc/apt/sources.list
-						break
-						;;	
-					"Unstable")
-						sudo sed -i "s/bookworm/unstable/" /etc/apt/sources.list
-						break
-						;;
-					"Quit")
-						break
-						;;
-					*)
-						echo "${red}Invalid Option.${cr}"
-						;;
-				esac
-			done
 			if [ $releaseSelection = Testing ] || [ $releaseSelection = Unstable ]; then
+				selectReleaseVersion
 				if ask_yes_no "${purple}:: Update && Upgrade system now?${cr}"; then
 					sudo apt update && sudo apt upgrade -y
 				else
@@ -59,7 +63,7 @@ function switchRelease {
 			echo "${grey}Skipping.${cr}"
 		fi
 	else
-		:
+		echo "${green}You are already on a non-stable version. Codename: $codename"
 	fi
 }
 

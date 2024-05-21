@@ -35,7 +35,7 @@ function bashPrompt {
 			echo "${red}~/.bashrc does not exist! Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -50,7 +50,7 @@ function bashTimeout {
 					sed -i "s/TMOUT.*/TMOUT=$tmout_seconds/" ~/.bashrc
 					echo "${green}A $tmout_seconds second timeout has been added and will be applied on next login or by running a new shell.${cr}"
 				else
-					echo "${grey}Skipping.${cr}"
+					skipping
 				fi
 			else
 				echo "TMOUT=$tmout_seconds" >> /home/$USER/.bashrc
@@ -60,6 +60,6 @@ function bashTimeout {
 				echo "${red}.bashrc does not exist. Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }

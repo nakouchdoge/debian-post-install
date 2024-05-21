@@ -37,10 +37,10 @@ function sshAuthorizedKeys {
 		if ask_yes_no "${purple}:: Input SSH keys? (At least one is required for key authentication!) ${cr}"; then
 			sshKeySetup
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 #
@@ -57,7 +57,7 @@ function sshPortChange {
 			echo "${red}/etc/ssh/sshd_config does not exist. Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 #
@@ -89,7 +89,7 @@ function sshSecurity {
 			echo "${green}Created 10-security.conf file with default rules${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -100,6 +100,6 @@ function sshService {
 		sleep 3
 		echo "${green}Restarted sshd.service${cr}"
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }

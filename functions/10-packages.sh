@@ -9,7 +9,7 @@ function aptUpdate {
 		sudo apt update && sudo apt upgrade -y
 		echo "${green}System updated.${cr}"
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -48,13 +48,13 @@ function switchRelease {
 				if ask_yes_no "${purple}:: Update && Upgrade system now?${cr}"; then
 					sudo apt update && sudo apt upgrade -y
 				else
-					echo "${grey}Skipping.${cr}"
+					skipping
 				fi
 			else
 				:
 			fi
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	else
 		echo "${green}You are already on a non-stable version. Codename: $codename"
@@ -88,7 +88,7 @@ function installDocker {
 
 		echo "${green}$USER added to group 'docker'${cr}"
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -110,7 +110,7 @@ function installPackages {
 			echo "${green}Success${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -120,7 +120,7 @@ function detectPackagesInstalled {
 			sudo systemctl start ssh.service
 			echo "${green}Success${cr}"
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	else
 		:
@@ -131,7 +131,7 @@ function detectPackagesInstalled {
 			sudo systemctl enable --now docker.service
 			echo "${green}Success${cr}"
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	else
 		:
@@ -167,7 +167,7 @@ function detectPackagesInstalled {
 					fi
 				fi
 			else
-				echo "${grey}Skipping.${cr}"
+				skipping
 			fi
 		fi
 	else

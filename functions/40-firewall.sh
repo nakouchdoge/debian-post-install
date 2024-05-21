@@ -23,7 +23,7 @@ function enableUfw {
 	if ask_yes_no "${purple}:: Enable firewall? ${cr}"; then
 		sudo ufw enable
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -33,7 +33,7 @@ function detectUfw {
 			firewallSetup
 			enableUfw
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	else
 		if ask_yes_no "${purple}UFW installation not detected, install now?${cr}"; then
@@ -45,7 +45,7 @@ function detectUfw {
 				:
 			fi
 		else
-			echo "${grey}Skipping.${cr}"
+			skipping
 		fi
 	fi
 }

@@ -22,3 +22,7 @@ function ask_yes_no {
 function skipping {
 	echo "${grey}Skipping.${cr}"
 }
+
+function success {
+	echo "${green}Success.${cr}"
+}

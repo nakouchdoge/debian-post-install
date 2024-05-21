@@ -6,7 +6,7 @@
 
 - New function machineInfo in 00-misc.sh to get version codename.
 - New function switchRelease in 10-packages.sh which asks user if they want to switch update trains on Debian.
-- Added new functions to create NFS shares.
+- Added new functions to create NFS shares with checking.
 
 ### Changed
 

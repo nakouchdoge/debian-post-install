@@ -75,18 +75,6 @@ function nvimEnsureConfig {
 					skipping
 				fi
 			fi
-			if [ -d "/nix" ]; then
-				echo "${green}Found Nix Shell${cr}"
-			else
-				if ask_yes_no "${red}:: Nix shell not found, install now?${cr}"; then
-					curl -L https://nixos.org/nix/install | sh
-					if [ -d "/nix" ]; then
-						echo "${green}Success${cr}"
-					else
-						echo "${red}Something went wrong.${cr}"
-					fi
-				fi
-			fi
 			if nvim --version | grep -qF 0.9.; then
 				echo "${green}Found NeoVIM Version 0.9+${cr}"
 			else
@@ -97,12 +85,14 @@ function nvimEnsureConfig {
 }
 
 function mountAtBoot {
-	if [ -f "/etc/fstab" ]; then
-		echo "$nfsserver:$serverdirectory $localdirectory nfs defaults 0 0" | sudo tee /etc/fstab -a
+	if [ -f "/etc/fstab" ] && grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/fstab"; then
+		echo "${green}NFS share already exists in /etc/fstab.${cr}"
+	elif [ -f "/etc/fstab" ]; then
+		echo "$nfsserver:$nfsdirectory $localdirectory nfs defaults 0 0" | sudo tee /etc/fstab -a
 		echo "${green}/etc/fstab has been modified.${cr}"
 		if ask_yes_no "Run 'systemctl daemon-reload' to apply /etc/fstab changes?"; then
 			sudo systemctl daemon-reload
-			echo "${green}Success${cr}"
+			success
 		else
 			skipping
 		fi
@@ -124,10 +114,10 @@ function detectNfs {
 			echo " "
 			if ask_yes_no "${green}Add NFS share with these parameters?${cr}"; then
 				if [ -d "$localdirectory" ]; then
-					if ping -c 1 "$nfsserver"; then
+					if ping -c 1 "$nfsserver" &>/dev/null; then
 						sleep 1
 						echo "${green}Ping response from server... mounting.${cr}"
-						sudo mount "$nfsserver":"$nfsdirectory" "$localdirectory"
+						sudo mount "${nfsserver}":"${nfsdirectory}" "${localdirectory}"
 						if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
 							echo "${green}Successfully mounted.${cr}"
 							if ask_yes_no "Mount this share on boot?"; then
@@ -144,7 +134,7 @@ function detectNfs {
 					fi
 				else
 					if ask_yes_no "${red}$localdirectory does not exist locally. Create the directory?${cr}"; then
-					if ping -c 1 "$nfsserver"; then
+					if ping -c 1 "$nfsserver" &>/dev/null; then
 						sleep 1
 						echo "${green}Ping response from server... mounting.${cr}"
 						sudo mount -m "$nfsserver":"$nfsdirectory" "$localdirectory"
@@ -174,7 +164,7 @@ function detectNfs {
 		if ask_yes_no "${purple}:: Install nfs-common?${cr}"; then
 			sudo apt install nfs-common
 			if [ -d "/usr/share/nfs-common" ]; then
-				echo "${green}Success${cr}"
+				success
 				detectNfs
 			fi
 		else

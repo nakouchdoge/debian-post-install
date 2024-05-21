@@ -100,14 +100,14 @@ function installPackages {
 			if ask_yes_no "${purple}:: Install more packages? ${cr}"; then
 				read -p "${purple}Type the packages you would like to install (separated by a single space): ${cr}" packages_to_install
 				sudo apt install $packages_to_install
-				echo "${green}Success${cr}"
+				success
 			else
 				:
 			fi
 		else
 			read -p "${purple}Type the packages you would like to install (separated by a single space): ${cr}" packages_to_install
 			sudo apt install $packages_to_install
-			echo "${green}Success${cr}"
+			success
 		fi
 	else
 		skipping
@@ -118,7 +118,7 @@ function detectPackagesInstalled {
 	if [ -f "/usr/sbin/sshd" ]; then 
 		if ask_yes_no "${purple}:: OpenSSH installation detected, start now? ${cr}"; then
 			sudo systemctl start ssh.service
-			echo "${green}Success${cr}"
+			success
 		else
 			skipping
 		fi
@@ -129,7 +129,7 @@ function detectPackagesInstalled {
 	if [ -f "/usr/bin/docker" ]; then 
 		if ask_yes_no "${purple}:: Docker installation detected, enable now? ${cr}"; then
 			sudo systemctl enable --now docker.service
-			echo "${green}Success${cr}"
+			success
 		else
 			skipping
 		fi

@@ -27,6 +27,7 @@ function main {
 		"Modify Firewall" 
 		"Install NeoVIM Config" 
 		"Switch release version"
+		"Add NFS Share"
 		"Quit"
 	)
 	select userSelection in "${userChoices[@]}"; do
@@ -74,6 +75,9 @@ function main {
 				;;
 			"Switch release version")
 				switchRelease
+				;;
+			"Add NFS Share")
+				detectNfs
 				;;
 			"Quit")
 				break

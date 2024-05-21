@@ -13,12 +13,6 @@ DIR="$(dirname "$0")"
 . "$DIR"/functions/30-ssh.sh
 . "$DIR"/functions/40-firewall.sh
 
-red=$'\e[31m'
-purple=$'\e[35m'
-green=$'\e[32m'
-grey=$'\e[90m'
-cr=$'\e[0m'
-
 welcomeMessage
 machineInfo
 
@@ -51,6 +45,7 @@ function main {
 				detectUfw
 				nvimConfig
 				nvimEnsureConfig
+				detectNfs
 				;;
 			"Change Hostname")
 				changeHostname

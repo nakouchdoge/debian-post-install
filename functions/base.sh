@@ -1,5 +1,11 @@
 #!/bin/bash
 
+red=$'\e[31m'
+purple=$'\e[35m'
+green=$'\e[32m'
+grey=$'\e[90m'
+cr=$'\e[0m'
+
 function ask_yes_no {
 	local red=$'\e[31m'
 	cr=$'\e[0m'
@@ -11,4 +17,8 @@ function ask_yes_no {
 			* ) echo "${red}Invalid response${cr}";;
 		esac
 	done
+}
+
+function skipping {
+	echo "${grey}Skipping.${cr}"
 }

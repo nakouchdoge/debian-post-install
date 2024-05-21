@@ -4,12 +4,6 @@ DIR="$(dirname "$0")"
 
 . "$DIR"/functions/base.sh
 
-red=$'\e[31m'
-purple=$'\e[35m'
-green=$'\e[32m'
-grey=$'\e[90m'
-cr=$'\e[0m'
-
 function firewallSetup {
 	while true; do
 		read -p "${purple}IP to allow from: ${cr}" allowed_ip

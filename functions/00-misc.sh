@@ -4,12 +4,6 @@ DIR="$(dirname "$0")"
 
 . "$DIR"/functions/base.sh
 
-red=$'\e[31m'
-purple=$'\e[35m'
-green=$'\e[32m'
-grey=$'\e[90m'
-cr=$'\e[0m'
-
 function machineInfo {
 	export codename=$(grep -oP "(?<=VERSION_CODENAME=)\w+" "/etc/os-release")
 	echo OS Release Codename: $codename
@@ -36,7 +30,7 @@ function changeHostname {
 			echo "${red}Hostname file doesn't exist. Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -54,7 +48,7 @@ function nvimConfig {
 					echo "${red}Something went wrong.${cr}"
 				fi
 			else
-				echo "${grey}Skipping.${cr}"
+				skipping
 			fi
 		else
 			git clone https://github.com/nakouchdoge/nvim /home/$USER/.config/nvim
@@ -65,7 +59,7 @@ function nvimConfig {
 			fi
 		fi
 	else
-		echo "${grey}Skipping.${cr}"
+		skipping
 	fi
 }
 
@@ -78,7 +72,7 @@ function nvimEnsureConfig {
 				if ask_yes_no "${red}:: No C compiler found, install GCC?${cr}"; then
 					sudo apt install gcc -y
 				else
-					echo "${grey}Skipping.${cr}"
+					skipping
 				fi
 			fi
 			if [ -d "/nix" ]; then
@@ -101,4 +95,93 @@ function nvimEnsureConfig {
 		fi
 	fi
 }
+
+function mountAtBoot {
+	if [ -f "/etc/fstab" ]; then
+		echo "$nfsserver:$serverdirectory $localdirectory nfs defaults 0 0" | sudo tee /etc/fstab -a
+		echo "${green}/etc/fstab has been modified.${cr}"
+		if ask_yes_no "Run 'systemctl daemon-reload' to apply /etc/fstab changes?"; then
+			sudo systemctl daemon-reload
+			echo "${green}Success${cr}"
+		else
+			skipping
+		fi
+	else
+		echo "${red}Cannot find /etc/fstab. Exiting.${cr}"
+	fi
+}
+
+function detectNfs {
+	if [ -d "/usr/share/nfs-common" ]; then
+		if ask_yes_no "${purple}:: Add an NFS share?${cr}"; then
+			read -p "${purple}Enter server IP address: ${cr}" nfsserver
+			read -p "${purple}Enter server's directory (e.g. /myserver/share/): ${cr}" nfsdirectory
+			read -p "${purple}Enter absolute path of local directory to mount the share: ${cr}" localdirectory
+			echo " "
+			echo "Server IP: $nfsserver"
+			echo "Server Directory: $nfsdirectory"
+			echo "Local Directory: $localdirectory"
+			echo " "
+			if ask_yes_no "${green}Add NFS share with these parameters?${cr}"; then
+				if [ -d "$localdirectory" ]; then
+					if ping -c 1 "$nfsserver"; then
+						sleep 1
+						echo "${green}Ping response from server... mounting.${cr}"
+						sudo mount "$nfsserver":"$nfsdirectory" "$localdirectory"
+						if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
+							echo "${green}Successfully mounted.${cr}"
+							if ask_yes_no "Mount this share on boot?"; then
+								mountAtBoot
+							else
+								skipping
+							fi
+						else
+							echo "${red}Check /etc/mtab, mount unsucessful.${cr}"
+						fi
+					else
+						echo "${red}No ping response from server. Exiting.${cr}"
+						exit
+					fi
+				else
+					if ask_yes_no "${red}$localdirectory does not exist locally. Create the directory?${cr}"; then
+					if ping -c 1 "$nfsserver"; then
+						sleep 1
+						echo "${green}Ping response from server... mounting.${cr}"
+						sudo mount -m "$nfsserver":"$nfsdirectory" "$localdirectory"
+						if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
+							echo "${green}Successfully mounted.${cr}"
+							if ask_yes_no "Mount this share on boot?"; then
+								mountAtBoot
+							else
+								skipping
+							fi
+						else
+							echo "${red}Check /etc/mtab, mount unsucessful.${cr}"
+						fi
+					else
+						echo "${grey}Cancelled.${cr}"
+						unset nfsserver nfsdirectory localdirectory
+					fi
+					fi
+				fi
+			else
+				unset nfsserver nfsdirectory localdirectory
+			fi
+		else
+			skipping
+		fi
+	else
+		if ask_yes_no "${purple}:: Install nfs-common?${cr}"; then
+			sudo apt install nfs-common
+			if [ -d "/usr/share/nfs-common" ]; then
+				echo "${green}Success${cr}"
+				detectNfs
+			fi
+		else
+			skipping
+		fi
+	fi
+}
+
+
 

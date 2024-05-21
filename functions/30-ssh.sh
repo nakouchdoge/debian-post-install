@@ -4,12 +4,6 @@ DIR="$(dirname "$0")"
 
 . "$DIR"/functions/base.sh
 
-red=$'\e[31m'
-purple=$'\e[35m'
-green=$'\e[32m'
-grey=$'\e[90m'
-cr=$'\e[0m'
-
 function sshKeySetup {
 	while true; do
 		read -p "${purple}Input SSH key (one at a time): ${cr}" user_ssh_key

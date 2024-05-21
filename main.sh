@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# --- Version 0.2 Signed ---
+# --- Version 0.2.2 Signed ---
 # 
 # This is TN. github@nakouchdoge/scripts
 #
@@ -49,7 +49,6 @@ function main {
 				sshSecurity
 				sshService
 				detectUfw
-				enableUfw
 				nvimConfig
 				nvimEnsureConfig
 				;;
@@ -73,7 +72,6 @@ function main {
 				;;
 			"Modify Firewall")
 				detectUfw
-				enableUfw
 				;;
 			"Install NeoVIM Config")
 				nvimConfig

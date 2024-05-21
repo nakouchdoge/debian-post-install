@@ -13,7 +13,7 @@ cr=$'\e[0m'
 function sshKeySetup {
 	while true; do
 		read -p "${purple}Input SSH key (one at a time): ${cr}" user_ssh_key
-		echo "$user_ssh_key" >> /home/$USER/.ssh/authorized_keys		
+		echo "$user_ssh_key" >> /home/$USER/.ssh/authorized_keys
 		read -p "${purple}Add another? (y/n): ${cr}" choice
 		case $choice in
 			[Yy]* ) continue;;
@@ -63,13 +63,13 @@ function sshPortChange {
 			echo "${red}/etc/ssh/sshd_config does not exist. Something went wrong.${cr}"
 		fi
 	else
-		echo "${grey}Skipping.${cr}" 
+		echo "${grey}Skipping.${cr}"
 	fi
 }
 #
 # Add standard SSH security settings
 #
-function sshSecurity { 
+function sshSecurity {
 	if ask_yes_no "${purple}:: Change SSH security config? ${cr}"; then
 		echo "${green}Securing SSH for key-based authentication and removing root login.${cr}"
 		if [ -f "/etc/ssh/sshd_config.d/10-security.conf" ]; then

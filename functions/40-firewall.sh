@@ -24,10 +24,20 @@ function firewallSetup {
 	done
 }
 
+function enableUfw {
+	sudo ufw status numbered
+	if ask_yes_no "${purple}:: Enable firewall? ${cr}"; then
+		sudo ufw enable
+	else
+		echo "${grey}Skipping.${cr}"
+	fi
+}
+
 function detectUfw {
 	if [ -f "/usr/sbin/ufw" ]; then
 		if ask_yes_no "${purple}:: Modify firewall? ${cr}"; then
 			firewallSetup
+			enableUfw
 		else
 			echo "${grey}Skipping.${cr}"
 		fi
@@ -36,23 +46,12 @@ function detectUfw {
 			sudo apt install ufw -y
 			if [ -f "/usr/sbin/ufw" ]; then
 				echo "${green}Success.${cr}"
+				detectUfw
 			else
 				:
 			fi
 		else
 			echo "${grey}Skipping.${cr}"
 		fi
-	fi
-}
-
-function enableUfw {
-	if [ -f "/usr/sbin/ufw" ]; then
-		if ask_yes_no "${purple}:: Enable firewall? ${cr}"; then
-			sudo ufw enable
-		else
-			echo "${grey}Skipping.${cr}"
-		fi
-	else
-		echo "..."
 	fi
 }

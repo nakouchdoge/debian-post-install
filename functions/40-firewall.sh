@@ -36,7 +36,7 @@ function detectUfw {
 			skipping
 		fi
 	else
-		if ask_yes_no "${purple}UFW installation not detected, install now?${cr}"; then
+		if ask_yes_no "${purple}:: UFW installation not detected, install now?${cr}"; then
 			sudo apt install ufw -y
 			if [ -f "/usr/sbin/ufw" ]; then
 				success

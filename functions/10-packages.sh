@@ -115,6 +115,13 @@ function installPackages {
 }
 
 function detectPackagesInstalled {
+	detectOpenSsh
+	detectDocker
+	detectNeoVim
+	detectBat
+}	
+
+function detectOpenSsh {
 	if [ -f "/usr/sbin/sshd" ]; then 
 		if ask_yes_no "${purple}:: OpenSSH installation detected, start now? ${cr}"; then
 			sudo systemctl start ssh.service
@@ -125,7 +132,11 @@ function detectPackagesInstalled {
 	else
 		:
 	fi
-
+}
+#
+# Docker Detection
+#
+function detectDocker {
 	if [ -f "/usr/bin/docker" ]; then 
 		if ask_yes_no "${purple}:: Docker installation detected, enable now? ${cr}"; then
 			sudo systemctl enable --now docker.service
@@ -136,35 +147,34 @@ function detectPackagesInstalled {
 	else
 		:
 	fi
+}
+#
+# NeoVIM Detection
+#
+function echoNeoVimAliases {
+	echo "alias v='nvim'" >> /home/$USER/.bash_aliases
+	echo "alias vi='nvim'" >> /home/$USER/.bash_aliases
+	echo "alias vim='nvim'" >> /home/$USER/.bash_aliases
+	echo "${green}~/.bash_aliases file modified.${cr}"
+	if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc"; then
+		echo "${green}~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified.${cr}"
+	else
+		echo "source /home/$USER/.bash_aliases" >> /home/$USER/.bashrc
+		echo "${green}~/.bashrc now points to ~/.bash_aliases, ~/.bashrc has been modified.${cr}"
+	fi
+}
 
+function detectNeoVim {
 	if [ -f "/usr/bin/nvim" ]; then
 		if [ -f "/home/$USER/.bash_aliases" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc" && grep -qF "alias v='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vi='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vim='nvim'" "/home/$USER/.bash_aliases"; then
 			:
 		else
 			if ask_yes_no "${purple}:: NeoVIM installation detected, do you want 'v', 'vi', and 'vim' commands to be aliased to the 'nvim' command? ${cr}"; then
 				if [ -f "/home/$USER/.bash_aliases" ]; then
-					echo "alias v='nvim'" >> /home/$USER/.bash_aliases
-					echo "alias vi='nvim'" >> /home/$USER/.bash_aliases
-					echo "alias vim='nvim'" >> /home/$USER/.bash_aliases
-					echo "${green}~/.bash_aliases file modified.${cr}"
-					if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc"; then
-						echo "${green}~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified.${cr}"
-					else
-						echo "source /home/$USER/.bash_aliases" >> /home/$USER/.bashrc
-						echo "${green}~/.bashrc now points to ~/.bash_aliases, ~/.bashrc has been modified.${cr}"
-					fi
+					echoNeoVimAliases
 				else
 					touch /home/$USER/.bash_aliases
-					echo "alias v='nvim'" >> /home/$USER/.bash_aliases
-					echo "alias vi='nvim'" >> /home/$USER/.bash_aliases
-					echo "alias vim='nvim'" >> /home/$USER/.bash_aliases
-					echo "${green}~/.bash_aliases file created and aliases added.${cr}"
-					if [ -f "/home/$USER/.bashrc" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc"; then
-						echo "${green}~/.bashrc points to ~/.bash_aliases already, ~/.bashrc has not been modified.${cr}"
-					else
-						echo "source /home/$USER/.bash_aliases" >> /home/$USER/.bashrc
-						echo "${green}~/.bashrc now points to ~/.bash_aliases, ~/.bashrc has been modified.${cr}"
-					fi
+					echoNeoVimAliases
 				fi
 			else
 				skipping
@@ -172,5 +182,43 @@ function detectPackagesInstalled {
 		fi
 	else
 		:
+	fi
+}
+#
+# Batcat Detection
+#
+function checkBatSymbolicExists {
+	if [ -L "/home/$USER/.local/bin/bat" ] && [ -f "/home/$USER/.local/bin/bat" ]; then
+		echo "${green}Bat symbolic link already exists.${cr}"
+	else
+		ln -s /usr/bin/batcat /home/$USER/.local/bin/bat
+	fi
+}
+
+function checkBatSymbolic {
+	if [ -L "/home/$USER/.local/bin/bat" ]; then
+		success
+	else
+		echo "${red}Something went wrong. Symbolic link not created.${cr}"
+	fi
+}
+
+function detectBat {
+	if [ -f "/usr/bin/batcat" ] && [ $codename = bookworm ] || [ $codename = trixie ] && [ ! -f "/usr/bin/bat" ];then
+		if ask_yes_no "${purple}:: Bat installation detected, do you want to create a symbolic link so the command 'bat' can be used instead of 'batcat'?${cr}"; then
+			if [ -d "/home/$USER/.local/bin" ]; then
+				echo "~/.local/bin directory exists already, skipping creating directory."
+				checkBatSymbolicExists
+				checkBatSymbolic
+			else	
+				mkdir /home/$USER/.local/bin
+				echBatSymbolicExists
+				checkBatSymbolic
+			fi
+		else
+			skipping
+		fi
+	else
+		:	
 	fi
 }

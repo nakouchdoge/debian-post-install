@@ -46,7 +46,7 @@ function main {
 				detectUfw
 				nvimConfig
 				nvimEnsureConfig
-				detectNfs
+				createNfsShare
 				;;
 			"Change Hostname")
 				changeHostname
@@ -77,7 +77,7 @@ function main {
 				switchRelease
 				;;
 			"Add NFS Share")
-				detectNfs
+				createNfsShare
 				;;
 			"Quit")
 				break

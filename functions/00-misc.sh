@@ -101,7 +101,28 @@ function mountAtBoot {
 	fi
 }
 
-function detectNfs {
+function addNfsShare {
+	if ping -c 1 "$nfsserver" &>/dev/null; then
+		sleep 1
+		echo "${green}Ping response from server... mounting.${cr}"
+		sudo mount "${nfsserver}":"${nfsdirectory}" "${localdirectory}"
+		if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
+			echo "${green}Successfully mounted.${cr}"
+			if ask_yes_no "Mount this share on boot?"; then
+				mountAtBoot
+			else
+				skipping
+			fi
+		else
+			echo "${red}Check /etc/mtab, mount unsucessful.${cr}"
+		fi
+	else
+		echo "${red}No ping response from server. Exiting.${cr}"
+		exit
+	fi
+}
+
+function createNfsShare {
 	if [ -d "/usr/share/nfs-common" ]; then
 		if ask_yes_no "${purple}:: Add an NFS share?${cr}"; then
 			read -p "${purple}Enter server IP address: ${cr}" nfsserver
@@ -114,64 +135,37 @@ function detectNfs {
 			echo " "
 			if ask_yes_no "${green}Add NFS share with these parameters?${cr}"; then
 				if [ -d "$localdirectory" ]; then
-					if ping -c 1 "$nfsserver" &>/dev/null; then
-						sleep 1
-						echo "${green}Ping response from server... mounting.${cr}"
-						sudo mount "${nfsserver}":"${nfsdirectory}" "${localdirectory}"
-						if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
-							echo "${green}Successfully mounted.${cr}"
-							if ask_yes_no "Mount this share on boot?"; then
-								mountAtBoot
-							else
-								skipping
-							fi
-						else
-							echo "${red}Check /etc/mtab, mount unsucessful.${cr}"
-						fi
-					else
-						echo "${red}No ping response from server. Exiting.${cr}"
-						exit
-					fi
+					addNfsShare
 				else
 					if ask_yes_no "${red}$localdirectory does not exist locally. Create the directory?${cr}"; then
-					if ping -c 1 "$nfsserver" &>/dev/null; then
-						sleep 1
-						echo "${green}Ping response from server... mounting.${cr}"
-						sudo mount -m "$nfsserver":"$nfsdirectory" "$localdirectory"
-						if grep -qF "$nfsserver:$nfsdirectory $localdirectory" "/etc/mtab"; then 
-							echo "${green}Successfully mounted.${cr}"
-							if ask_yes_no "Mount this share on boot?"; then
-								mountAtBoot
-							else
-								skipping
-							fi
-						else
-							echo "${red}Check /etc/mtab, mount unsucessful.${cr}"
-						fi
+						sudo mkdir "$localdirectory"
+						addNfsShare
 					else
 						echo "${grey}Cancelled.${cr}"
-						unset nfsserver nfsdirectory localdirectory
-					fi
+						exit
 					fi
 				fi
 			else
-				unset nfsserver nfsdirectory localdirectory
+# If they answer "no" to their parameters, we re-run the function."
+				createNfsShare
 			fi
 		else
 			skipping
 		fi
 	else
-		if ask_yes_no "${purple}:: Install nfs-common?${cr}"; then
-			sudo apt install nfs-common
-			if [ -d "/usr/share/nfs-common" ]; then
-				success
-				detectNfs
+		echo "${red}nfs-common not installed.${cr}"
+		if [ ! -d "/usr/share/nfs-common" ]; then
+			if ask_yes_no "${purple}:: Install nfs-common?${cr}"; then
+				sudo apt install nfs-common
+				if [ -d "/usr/share/nfs-common" ]; then
+					success
+					createNfsShare
+				fi
+			else
+				skipping
 			fi
 		else
-			skipping
+			:
 		fi
 	fi
 }
-
-
-

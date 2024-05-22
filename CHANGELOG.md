@@ -13,6 +13,7 @@
 
 - Changed firewall functions. Now displays the UFW status with numbers before asking to enable.
 - Consolidated repeated lines into simple functions in base.sh to avoid repeated code.
+- Consolidated repeated lines into different functions in all scripts.
 
 ### Fixed
 

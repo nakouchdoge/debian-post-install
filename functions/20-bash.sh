@@ -7,29 +7,27 @@ DIR="$(dirname "$0")"
 
 . "$DIR"/functions/base.sh
 
+function addBashPrompt {
+	echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
+	if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
+		echo "${green}Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified.${cr}"
+	else
+		echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
+		echo "${green}Added source line to .bashrc${cr}"
+	fi
+}
+
 function bashPrompt {
 	if ask_yes_no "${purple}:: Add custom debian bash prompt? ${cr}"; then
 		if [ -f "/home/$USER/.bashrc" ]; then
 			if [ -f "/home/$USER/.bash_prompt" ]; then
 				mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
-				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
-				echo "${green}.bash_prompt backed up and custom prompt added${cr}"
-				if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
-					echo "${green}Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified.${cr}"
-				else
-					echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
-					echo "${green}Added source line to .bashrc${cr}"
-				fi
+				echo "${green}.bash_prompt backed up to .bash_prompt.bak${cr}"
+				addBashPrompt
 			else
 				touch /home/$USER/.bash_prompt
-				echo "PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[38;5;38m\]\w\[\e[0m\]\$ '" >> /home/$USER/.bash_prompt
 				echo "${green}Created ~/.bash_prompt${cr}"
-				if grep -qF "source /home/$USER/.bash_prompt" "/home/$USER/.bashrc"; then
-					echo "${green}Custom prompt source file exists in ~/.bashrc. ~/.bashrc has not been modified.${cr}"
-				else
-					echo "source /home/$USER/.bash_prompt" >> /home/$USER/.bashrc
-					echo "${green}Added source line to .bashrc${cr}"
-				fi
+				addBashPrompt
 			fi
 		else
 			echo "${red}~/.bashrc does not exist! Something went wrong.${cr}"

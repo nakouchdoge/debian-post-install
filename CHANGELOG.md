@@ -14,6 +14,7 @@
 - Changed firewall functions. Now displays the UFW status with numbers before asking to enable.
 - Consolidated repeated lines into simple functions in base.sh to avoid repeated code.
 - Consolidated repeated lines into different functions in all scripts.
+- Removed '-y' flag from apt upgrade command in aptUpdate function.
 
 ### Fixed
 
@@ -22,6 +23,7 @@
 - Fixed checking of .ssh directory ownership. Previously only the user was set, not group. Using grep to find user and group IDs and applying IDs to chown command.
 - Fixed SSH port change function from defaulting back to port 22 if the user chose to not change their port. Now the port will not be changed at all if you answer no, regardless of what it's set to.
 - Check if directory is owned by USER:GROUP syntax wrong in 30-ssh.sh, fixed.
+- Re-added aptUpdate function to main.sh, was missing.
 
 ## [0.2.1] - 2024-05-19
 

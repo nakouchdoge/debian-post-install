@@ -63,29 +63,26 @@ function sshPortChange {
 #
 # Add standard SSH security settings
 #
+function echoSshSecurity {
+	sudo touch /etc/ssh/sshd_config.d/10-security.conf
+	sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "PubkeyAuthentication yes" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+	sudo echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+}
+
 function sshSecurity {
 	if ask_yes_no "${purple}:: Change SSH security config? ${cr}"; then
 		echo "${green}Securing SSH for key-based authentication and removing root login.${cr}"
 		if [ -f "/etc/ssh/sshd_config.d/10-security.conf" ]; then
 			sudo mv /etc/ssh/sshd_config.d/10-security.conf /etc/ssh/sshd_config.d/10-security.conf.old
-			sudo touch /etc/ssh/sshd_config.d/10-security.conf
-			sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PubkeyAuthentication yes" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+			echoSshSecurity
 			echo "${green}Backed up old 10-security.conf (10-security.conf.old) file and created a new one default rules${cr}"
 		else
-			sudo touch /etc/ssh/sshd_config.d/10-security.conf
-			sudo echo "#Override for any other .conf files that may appear here to ensure password authentication and root login is prohibited" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PermitEmptyPasswords no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "PubkeyAuthentication yes" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
-			sudo echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/10-security.conf -a
+			echoSshSecurity
 			echo "${green}Created 10-security.conf file with default rules${cr}"
 		fi
 	else

@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [WORK IN PROGRESS 0.2.2] - 2024-05-21
+## [WORK IN PROGRESS 0.2.2] - 2024-05-22
 
 ### Added
 

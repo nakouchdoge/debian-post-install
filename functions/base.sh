@@ -6,6 +6,8 @@ green=$'\e[32m'
 grey=$'\e[90m'
 cr=$'\e[0m'
 
+scriptversion="0.2.2"
+
 function ask_yes_no {
 	local red=$'\e[31m'
 	cr=$'\e[0m'

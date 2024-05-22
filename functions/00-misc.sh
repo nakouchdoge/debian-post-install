@@ -11,7 +11,7 @@ function machineInfo {
 
 function welcomeMessage {
 	echo "Welcome to nakouchdoge's post-install script for Debian"
-	echo "${green}Version 0.2.2${cr}"
+	echo "${green}$scriptversion${cr}"
 	echo ""
 	echo "${red}Do not run this script as root.${cr}"
 }

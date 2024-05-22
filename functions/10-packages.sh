@@ -94,8 +94,8 @@ function installDocker {
 
 function installPackages {
 	if ask_yes_no "${purple}:: Install packages? ${cr}"; then
-		if ask_yes_no "${purple}:: Install default packages? (neovim htop neofetch ncdu qemu-guest-agent git openssh-server)? ${cr}"; then
-			sudo apt install neovim htop neofetch ncdu qemu-guest-agent git openssh-server
+		if ask_yes_no "${purple}:: Install default packages? (neovim htop ncdu qemu-guest-agent git wget gcc make fzf ufw bat openssh-server)? ${cr}"; then
+			sudo apt install neovim htop ncdu qemu-guest-agent git wget gcc make fzf ufw bat openssh-server
 			echo "${green}Default packages successfully installed.${cr}"
 			if ask_yes_no "${purple}:: Install more packages? ${cr}"; then
 				read -p "${purple}Type the packages you would like to install (separated by a single space): ${cr}" packages_to_install

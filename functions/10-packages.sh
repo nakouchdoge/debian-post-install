@@ -6,7 +6,7 @@ DIR="$(dirname "$0")"
 
 function aptUpdate {
 	if ask_yes_no "${purple}:: Update & upgrade system?: ${cr}"; then
-		sudo apt update && sudo apt upgrade -y
+		sudo apt update && sudo apt upgrade
 		echo "${green}System updated.${cr}"
 	else
 		skipping

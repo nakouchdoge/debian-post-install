@@ -34,6 +34,7 @@ function main {
 		case $userSelection in
 			"Run the whole script!")
 				changeHostname
+				aptUpdate
 				installDocker
 				installPackages
 				detectPackagesInstalled

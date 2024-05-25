@@ -19,7 +19,7 @@ function addBashPrompt {
 
 function bashPrompt {
 	if ask_yes_no "${purple}:: Add custom debian bash prompt? ${cr}"; then
-		if [ -f "/home/$USER/.bashrc" ]; then
+			if [ -f "/home/$USER/.bashrc" ]; then
 			if [ -f "/home/$USER/.bash_prompt" ]; then
 				mv /home/$USER/.bash_prompt /home/$USER/.bash_prompt.bak
 				echo "${green}.bash_prompt backed up to .bash_prompt.bak${cr}"
@@ -34,6 +34,29 @@ function bashPrompt {
 		fi
 	else
 		skipping
+	fi
+}
+
+function checkBashCustom {
+	if [ -f "/home/$USER/.bash_custom" ]; then
+		if ask_yes_no "${red}/home/$USER/.bash_custom already exists. Backup and create new file?${cr}"; then
+			mv /home/$USER/.bash_custom /home/$USER/.bash_custom.bak
+			touch /home/$USER/.bash_custom	
+			if [ -f "/home/$USER/.bash_custom" ]; then
+				success
+			else
+				skipping
+			fi
+		else
+			skipping
+		fi
+	else
+		touch /home/$USER/.bash_custom
+			if [ -f "/home/$USER/.bash_custom" ]; then
+				success
+			else
+				echo "${red}Something went wrong. Check /home/$USER directory/${cr}"
+			fi
 	fi
 }
 

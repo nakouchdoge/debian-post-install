@@ -212,7 +212,7 @@ function detectBat {
 				checkBatSymbolic
 			else	
 				mkdir /home/$USER/.local/bin
-				echBatSymbolicExists
+				checkBatSymbolicExists
 				checkBatSymbolic
 			fi
 		else

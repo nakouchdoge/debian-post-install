@@ -18,6 +18,11 @@ function sshKeySetup {
 }
 
 function sshAuthorizedKeys {
+	if [ ! -d "/home/$USER/.ssh" ]; then
+		touch /home/$USER/.ssh
+	else
+		:	
+	fi
 	if ask_yes_no "${purple}:: Modify authorized SSH keys? This will create a backup of ~/.ssh/authorized_keys and create a new one. ${cr}"; then
 		echo "${purple}Creating ~/.ssh/authorized_keys${cr}"
 		if [ -f "/home/$USER/.ssh/authorized_keys" ]; then

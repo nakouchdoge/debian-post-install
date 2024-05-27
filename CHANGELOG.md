@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [WORK IN PROGRESS 0.2.2] - 2024-05-22
+## [WORK IN PROGRESS 0.2.2] - 2024-05-27
 
 ### Added
 
@@ -12,6 +12,7 @@
 ### Changed
 
 - Changed firewall functions. Now displays the UFW status with numbers before asking to enable.
+- Firewall function gives an example to the user to add a port protocol.
 - Consolidated repeated lines into simple functions in base.sh to avoid repeated code.
 - Consolidated repeated lines into different functions in all scripts.
 - Removed '-y' flag from apt upgrade command in aptUpdate function.
@@ -24,6 +25,8 @@
 - Fixed SSH port change function from defaulting back to port 22 if the user chose to not change their port. Now the port will not be changed at all if you answer no, regardless of what it's set to.
 - Check if directory is owned by USER:GROUP syntax wrong in 30-ssh.sh, fixed.
 - Re-added aptUpdate function to main.sh, was missing.
+- Typo in 10-packages.sh bat function 
+- SSH function now checks if the directory .ssh exists, and if it doesn't, to create it.
 
 ## [0.2.1] - 2024-05-19
 

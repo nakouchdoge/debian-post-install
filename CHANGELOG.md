@@ -8,7 +8,7 @@
 - New function switchRelease in 10-packages.sh which asks user if they want to switch update trains on Debian.
 - Added new functions to create NFS shares with checking.
 - Added option in main.sh to add NFS shares.
-
+- checkGit function
 ### Changed
 
 - Changed firewall functions. Now displays the UFW status with numbers before asking to enable.
@@ -16,6 +16,7 @@
 - Consolidated repeated lines into simple functions in base.sh to avoid repeated code.
 - Consolidated repeated lines into different functions in all scripts.
 - Removed '-y' flag from apt upgrade command in aptUpdate function.
+- nvimConfig function now checks if git is installed.
 
 ### Fixed
 
@@ -27,6 +28,7 @@
 - Re-added aptUpdate function to main.sh, was missing.
 - Typo in 10-packages.sh bat function 
 - SSH function now checks if the directory .ssh exists, and if it doesn't, to create it.
+- Fixed colors on switchRelease function
 
 ## [0.2.1] - 2024-05-19
 

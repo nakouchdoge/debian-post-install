@@ -57,7 +57,7 @@ function switchRelease {
 			skipping
 		fi
 	else
-		echo "${green}You are already on a non-stable version. Codename: $codename"
+		echo "${green}You are already on a non-stable version. Codename: ${codename}${cr}"
 	fi
 }
 

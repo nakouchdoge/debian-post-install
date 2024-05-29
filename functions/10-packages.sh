@@ -160,6 +160,13 @@ function echoNeoVimAliases {
 	fi
 }
 
+function manualDetectNeoVim {
+	if [ -f "/usr/bin/nvim" ]; then
+		detectNeoVim
+	else
+		echo "${red}NeoVIM Install not found.${cr}"
+	fi
+}
 function detectNeoVim {
 	if [ -f "/usr/bin/nvim" ]; then
 		nvimConfig

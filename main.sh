@@ -70,7 +70,7 @@ function main {
 				detectUfw
 				;;
 			"Install NeoVIM Config")
-				detectNeoVim
+				manualDetectNeoVim
 				;;
 			"Switch release version")
 				switchRelease

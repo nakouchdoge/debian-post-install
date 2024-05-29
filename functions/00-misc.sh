@@ -34,12 +34,12 @@ function changeHostname {
 	fi
 }
 
-fucntion checkGit {
+function checkGit {
 	if [ -f "/usr/bin/git" ]; then
 		echo "${green}Git installed, continuing.${cr}"
 		return 0
 	else
-		if ask_yes_no "${red}Git not installed, install now?{$cr}"; then
+		if ask_yes_no "${red}Git not installed, install now?${cr}"; then
 			sudo apt install git
 			if [ -f "/usr/bin/git" ]; then
 				success

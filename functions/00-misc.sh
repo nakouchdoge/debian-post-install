@@ -49,14 +49,14 @@ function checkGit {
 				return 1
 			fi
 		else
-			echo "${red}Git must be installed to pull NeoVIM config${cr}"
+			echo "${red}Git must be installed to pull NeoVIM config.${cr}"
 			return 1
 		fi
 	fi
 }
 
 function nvimConfig {
-	if ask_yes_no "${purple}:: Clone nvim configuration from git?${cr}" && if checkGit; then
+	if ask_yes_no "${purple}:: Clone nvim configuration from git?${cr}"; then
 		if [ -d "/home/$USER/.config/nvim" ]; then
 			echo "${red}~/.config/nvim already exists!${cr}"
 			if ask_yes_no "${red}Create a backup of /home/$USER/.config/nvim and clone from git repository anyways?${cr}"; then

@@ -1,6 +1,6 @@
 # ChangeLog
 
-## [WORK IN PROGRESS 0.2.2] - 2024-05-27
+## [WORK IN PROGRESS 0.2.2] - 2024-05-29
 
 ### Added
 
@@ -9,6 +9,7 @@
 - Added new functions to create NFS shares with checking.
 - Added option in main.sh to add NFS shares.
 - checkGit function
+
 ### Changed
 
 - Changed firewall functions. Now displays the UFW status with numbers before asking to enable.
@@ -17,6 +18,7 @@
 - Consolidated repeated lines into different functions in all scripts.
 - Removed '-y' flag from apt upgrade command in aptUpdate function.
 - nvimConfig function now checks if git is installed.
+- Moved neovim configuration functions
 
 ### Fixed
 
@@ -29,6 +31,7 @@
 - Typo in 10-packages.sh bat function 
 - SSH function now checks if the directory .ssh exists, and if it doesn't, to create it.
 - Fixed colors on switchRelease function
+- Neovim config functions now check if neovim is actually installed
 
 ## [0.2.1] - 2024-05-19
 

@@ -41,18 +41,14 @@ function selectReleaseVersion {
 }
 
 function switchRelease {
-	if [ $codename = bookworm ]; then
+	if [[ $codename = bookworm ]]; then
 		if ask_yes_no "${purple}:: Switch Debian releases? (Switch to testing or unstable?): ${cr}"; then
-			if [ $releaseSelection = Testing ] || [ $releaseSelection = Unstable ]; then
 				selectReleaseVersion
 				if ask_yes_no "${purple}:: Update && Upgrade system now?${cr}"; then
 					sudo apt update && sudo apt upgrade -y
 				else
 					skipping
 				fi
-			else
-				:
-			fi
 		else
 			skipping
 		fi

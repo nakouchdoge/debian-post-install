@@ -162,6 +162,7 @@ function echoNeoVimAliases {
 
 function detectNeoVim {
 	if [ -f "/usr/bin/nvim" ]; then
+		nvimConfig
 		if [ -f "/home/$USER/.bash_aliases" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc" && grep -qF "alias v='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vi='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vim='nvim'" "/home/$USER/.bash_aliases"; then
 			:
 		else
@@ -178,6 +179,67 @@ function detectNeoVim {
 		fi
 	else
 		:
+	fi
+}
+
+function nvimConfig {
+	if ask_yes_no "${purple}:: Clone nvim configuration from git?${cr}"; then
+		if [ -d "/home/$USER/.config/nvim" ]; then
+			echo "${red}~/.config/nvim already exists!${cr}"
+			if ask_yes_no "${red}Create a backup of /home/$USER/.config/nvim and clone from git repository anyways?${cr}"; then
+				mv /home/$USER/.config/nvim /home/$USER/.config/nvim.backup
+				rm -rf /home/$USER/.config/nvim
+				git clone https://github.com/nakouchdoge/nvim /home/$USER/.config/nvim
+				if [ -d "/home/$USER/.config/nvim" ] && [ -d "/home/$USER/.config/nvim.backup" ]; then
+					echo "${green}Directory nvim.backup created and new directory has been cloned from git successfully.${cr}"
+					nvimEnsureConfig
+				else
+					echo "${red}Something went wrong.${cr}"
+				fi
+			else
+				skipping
+			fi
+		else
+			git clone https://github.com/nakouchdoge/nvim /home/$USER/.config/nvim
+			if [ -d "/home/$USER/.config/nvim" ]; then
+				echo "${green}Git repository nakouchdoge/nvim has been cloned successfully${cr}"
+				nvimEnsureConfig
+			else
+				echo "${red}Something went wrong.${cr}"
+			fi
+		fi
+	else
+		skipping
+	fi
+}
+
+function nvimEnsureConfig {
+	if grep -qF "https://github.com/nakouchdoge/nvim" "/home/$USER/.config/nvim/.git/config"; then
+		if ask_yes_no "${purple}:: Check if configuration is correct for nvim to work properly?${cr}"; then
+			if [ -f "/usr/bin/gcc" ] || [ -f "/usr/bin/cc" ] || [ -f "/usr/bin/clang" ] || [ -f "/usr/bin/cl" ] || [ -f "/usr/bin/zig" ]; then
+				echo "${green}Found C Compiler${cr}"
+			else
+				if ask_yes_no "${red}:: No C compiler found, install GCC?${cr}"; then
+					sudo apt install gcc
+				else
+					skipping
+				fi
+			fi
+			if nvim --version | grep -qF 0.9.; then
+				echo "${green}Found NeoVIM Version 0.9+${cr}"
+			else
+				echo "${red}You might be running an older version of neovim, if you run into issues, consider updating.${cr}"
+			fi
+			if [ -f "/usr/bin/npm" ]; then
+				echo "${green}Found NPM${cr}"
+			else
+				if ask_yes_no "${red}:: NPM Installation not found, install NPM?${cr}"; then
+					sudo apt install npm
+				else
+					skipping
+				fi
+			fi
+		fi
 	fi
 }
 #

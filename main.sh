@@ -45,8 +45,7 @@ function main {
 				sshSecurity
 				sshService
 				detectUfw
-				nvimConfig
-				nvimEnsureConfig
+				detectNeoVim
 				createNfsShare
 				;;
 			"Change Hostname")
@@ -71,8 +70,7 @@ function main {
 				detectUfw
 				;;
 			"Install NeoVIM Config")
-				nvimConfig
-				nvimEnsureConfig
+				detectNeoVim
 				;;
 			"Switch release version")
 				switchRelease

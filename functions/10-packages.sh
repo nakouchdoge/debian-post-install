@@ -223,16 +223,7 @@ function nvimConfig {
 function nvimEnsureConfig {
 	if grep -qF "https://github.com/nakouchdoge/nvim" "/home/$USER/.config/nvim/.git/config"; then
 		if ask_yes_no "${purple}:: Check if configuration is correct for nvim to work properly?${cr}"; then
-			if [ -f "/usr/bin/npm" ]; then 
-				echo "${green}Found NPM${cr}"
-			else
-				if ask_yes_no "${red}:: NPM executable not found, install now?${cr}"; then
-					sudo apt install gcc
-				else
-					skipping
-				fi
-			fi
-			if nvim --version | grep -qF 0.9. || nvim --version | grep -qF 0.10.; then
+			if [[ nvim --version | grep -qF 0.9. ]] || [[ nvim --version | grep -qF 0.10. ]]; then
 				echo "${green}Found NeoVIM Version 0.9+${cr}"
 			else
 				echo "${red}You might be running an older version of neovim, if you run into issues, consider updating.${cr}"

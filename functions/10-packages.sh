@@ -90,7 +90,7 @@ function installDocker {
 
 function installPackages {
 	if ask_yes_no "${purple}:: Install packages? ${cr}"; then
-		if ask_yes_no "${purple}:: Install default packages? (neovim htop ncdu qemu-guest-agent git wget gcc make fzf ufw bat openssh-server)? ${cr}"; then
+		if ask_yes_no "${purple}:: Install default packages? (neovim htop ncdu qemu-guest-agent unattended-upgrades git wget gcc make fzf ufw bat openssh-server)? ${cr}"; then
 			sudo apt install neovim htop ncdu qemu-guest-agent git wget gcc make fzf ufw bat openssh-server
 			echo "${green}Default packages successfully installed.${cr}"
 			if ask_yes_no "${purple}:: Install more packages? ${cr}"; then
@@ -114,7 +114,8 @@ function detectPackagesInstalled {
 	detectOpenSsh
 	detectDocker
 	detectNeoVim
-	detectBat
+	detectUnattendedUpgrades
+#	detectBat
 }	
 
 function detectOpenSsh {
@@ -240,6 +241,69 @@ function nvimEnsureConfig {
 				fi
 			fi
 		fi
+	fi
+}
+
+function fixUnattendedUpgrades {
+	sudo mv /etc/apt/apt.conf.d/20auto-upgrades /etc/apt/apt.conf.d/20auto-upgrades.bak	
+	sudo touch /etc/apt/apt.conf.d/20auto-upgrades
+	sudo echo "APT::Periodic::Update-Package-Lists \"1\";" | sudo tee /etc/apt/apt.conf.d/20auto-upgrades -a
+	sudo echo "APT::Periodic::Unattended-Upgrade \"1\";" | sudo tee /etc/apt/apt.conf.d/20auto-upgrades -a
+	sudo echo "APT::Periodic::AutocleanInterval \"1\";" | sudo tee /etc/apt/apt.conf.d/20auto-upgrades -a
+}
+
+function detectUnattendedUpgrades {
+	if [ -f "/usr/bin/unattended-upgrades" ]; then
+		if ask_yes_no "${purple}:: Check unattended-upgrades configuration?${cr}"; then
+			if [ -f "/etc/apt/apt.conf.d/20auto-upgrades" ]; then
+				if grep "APT::Periodic::Unattended-Upgrade\ \"1\"" "/etc/apt/apt.conf.d/20auto-upgrades"; then	
+					echo "${green}Unattended-upgrade enable OK${cr}"
+				else
+					echo "APT::Periodic::Unattended-Upgrade not found."
+					if ask_yes_no "${red}:: Configuration error, fix configuration? A backup will be created.${cr}"; then
+						fixUnattendedUpgrades
+					else
+						skipping
+					fi
+				fi
+				if grep "APT::Periodic::Update-Package-Lists\ \"1\"" "/etc/apt/apt.conf.d/20auto-upgrades"; then	
+					echo "${green}Update package lists enable OK${cr}"
+				else
+					echo "APT::Periodic::Update-Package-Lists not found."
+					if ask_yes_no "${red}:: Configuration error, fix configuration? A backup will be created.${cr}"; then
+						fixUnattendedUpgrades
+					else
+						skipping
+					fi
+				fi
+				if grep "APT::Periodic::AutocleanInterval\ \"1\"" "/etc/apt/apt.conf.d/20auto-upgrades"; then	
+					echo "${green}Autoclean enable OK${cr}"
+				else
+					echo "APT::Periodic::AutocleanInterval not found."
+					if ask_yes_no "${red}:: Configuration error, fix configuration? A backup will be created.${cr}"; then
+						fixUnattendedUpgrades
+					else
+						skipping
+					fi
+				fi
+			else
+				echo "${red}Unattended-upgrades configuration file cannot be found.${cr}"
+				if ask_yes_no "${purple}:: Create configuration file?${cr}"; then
+					sudo dpkg-reconfigure -plow unattended-upgrades
+					if [ -f "/etc/apt/apt.conf.d/20auto-upgrades" ]; then
+						success
+					else
+						echo "${red}Installation failed. Exiting.${cr}"	
+					fi
+				else
+					skipping
+				fi
+			fi
+		else
+			skipping
+		fi
+	else
+		:	
 	fi
 }
 #

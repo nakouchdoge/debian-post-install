@@ -245,38 +245,38 @@ function nvimEnsureConfig {
 #
 # Batcat Detection
 #
-function checkBatSymbolicExists {
-	if [ -L "/home/$USER/.local/bin/bat" ] && [ -f "/home/$USER/.local/bin/bat" ]; then
-		echo "${green}Bat symbolic link already exists.${cr}"
-	else
-		ln -s /usr/bin/batcat /home/$USER/.local/bin/bat
-	fi
-}
-
-function checkBatSymbolic {
-	if [ -L "/home/$USER/.local/bin/bat" ]; then
-		success
-	else
-		echo "${red}Something went wrong. Symbolic link not created.${cr}"
-	fi
-}
-
-function detectBat {
-	if [ -f "/usr/bin/batcat" ] && [ $codename = bookworm ] || [ $codename = trixie ] && [ ! -f "/usr/bin/bat" ];then
-		if ask_yes_no "${purple}:: Bat installation detected, do you want to create a symbolic link so the command 'bat' can be used instead of 'batcat'?${cr}"; then
-			if [ -d "/home/$USER/.local/bin" ]; then
-				echo "~/.local/bin directory exists already, skipping creating directory."
-				checkBatSymbolicExists
-				checkBatSymbolic
-			else	
-				mkdir /home/$USER/.local/bin
-				checkBatSymbolicExists
-				checkBatSymbolic
-			fi
-		else
-			skipping
-		fi
-	else
-		:	
-	fi
-}
+#function checkBatSymbolicExists {
+#	if [ -L "/home/$USER/.local/bin/bat" ] && [ -f "/home/$USER/.local/bin/bat" ]; then
+#		echo "${green}Bat symbolic link already exists.${cr}"
+#	else
+#		ln -s /usr/bin/batcat /home/$USER/.local/bin/bat
+#	fi
+#}
+#
+#function checkBatSymbolic {
+#	if [ -L "/home/$USER/.local/bin/bat" ]; then
+#		success
+#	else
+#		echo "${red}Something went wrong. Symbolic link not created.${cr}"
+#	fi
+#}
+#
+#function detectBat {
+#	if [ -f "/usr/bin/batcat" ] && [ $codename = bookworm ] || [ $codename = trixie ] && [ ! -f "/usr/bin/bat" ];then
+#		if ask_yes_no "${purple}:: Bat installation detected, do you want to create a symbolic link so the command 'bat' can be used instead of 'batcat'?${cr}"; then
+#			if [ -d "/home/$USER/.local/bin" ]; then
+#				echo "~/.local/bin directory exists already, skipping creating directory."
+#				checkBatSymbolicExists
+#				checkBatSymbolic
+#			else	
+#				mkdir /home/$USER/.local/bin
+#				checkBatSymbolicExists
+#				checkBatSymbolic
+#			fi
+#		else
+#			skipping
+#		fi
+#	else
+#		:	
+#	fi
+#}

@@ -9,6 +9,7 @@
 - Added new functions to create NFS shares with checking.
 - Added option in main.sh to add NFS shares.
 - checkGit function
+- Unattended upgrades functions
 
 ### Changed
 
@@ -32,6 +33,10 @@
 - SSH function now checks if the directory .ssh exists, and if it doesn't, to create it.
 - Fixed colors on switchRelease function
 - Neovim config functions now check if neovim is actually installed
+
+### Removed
+
+- Bat package detection and symbolic linking functions
 
 ## [0.2.1] - 2024-05-19
 

@@ -1,5 +1,17 @@
 # ChangeLog
 
+## [0.2.3] - WIP 
+
+### Added
+
+### Changed
+
+### Fixed
+
+- No longer asks to install docker if docker is already installed
+
+### Removed
+
 ## [0.2.2] - 2024-06-18
 
 ### Added

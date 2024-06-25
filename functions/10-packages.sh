@@ -58,33 +58,37 @@ function switchRelease {
 }
 
 function installDocker {
-	if ask_yes_no "${purple}:: Install docker? ${cr}"; then
-		echo "${purple}Installing docker engine${cr}"
+	if [ ! -f "/usr/bin/docker" ]; then
+		if ask_yes_no "${purple}:: Install docker? ${cr}"; then
+			echo "${purple}Installing docker engine${cr}"
 
-		sudo apt-get install ca-certificates curl
-		sudo install -m 0755 -d /etc/apt/keyrings
-		sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-		sudo chmod a+r /etc/apt/keyrings/docker.asc
+			sudo apt-get install ca-certificates curl
+			sudo install -m 0755 -d /etc/apt/keyrings
+			sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+			sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-		echo \
-		"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-		$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-		sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-		sudo apt-get update -y
-	#
-	# Install all the packages from the new repository. Included docker-compose package.
-	#
-		sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose -y
-	#
-	# User gets added to the "docker" group to allow use of the docker commands without sudo.
-	#
-		echo "${green}Docker successfully installed.${cr}"
+			echo \
+			"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+			$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+			sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+			sudo apt-get update -y
+		#
+		# Install all the packages from the new repository. Included docker-compose package.
+		#
+			sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose -y
+		#
+		# User gets added to the "docker" group to allow use of the docker commands without sudo.
+		#
+			echo "${green}Docker successfully installed.${cr}"
 
-		sudo usermod -aG docker $USER
+			sudo usermod -aG docker $USER
 
-		echo "${green}$USER added to group 'docker'${cr}"
+			echo "${green}$USER added to group 'docker'${cr}"
+		else
+			skipping
+		fi
 	else
-		skipping
+		:
 	fi
 }
 

@@ -23,9 +23,6 @@ function changeHostname {
 			sudo hostnamectl hostname $new_hostname
 			local hostname=$(cat /etc/hostname)
 			echo "${green}Hostname is now: $hostname${cr}"
-		elif [ -d "/usr/lib/systemd" ]; then
-			sudo touch /etc/hostname
-			echo "$new_hostname" | sudo tee "/etc/hostname"
 		else
 			echo "${red}Hostname file doesn't exist. Something went wrong.${cr}"
 		fi

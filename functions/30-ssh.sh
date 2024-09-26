@@ -19,7 +19,7 @@ function sshKeySetup {
 
 function sshAuthorizedKeys {
 	if [ ! -d "/home/$USER/.ssh" ]; then
-		touch /home/$USER/.ssh
+		mkdir /home/$USER/.ssh
 	else
 		:	
 	fi

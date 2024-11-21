@@ -7,7 +7,7 @@ DIR="$(dirname "$0")"
 function firewallSetup {
 	while true; do
 		read -p "${purple}IP to allow from: ${cr}" allowed_ip
-		read -p "${purple}Port to allow to (To insert a protocol type the port followed by a '/' and the protocol. (Example: 80/tcp): ${cr}" allowed_port
+		read -p "${purple}Port to allow: ${cr}" allowed_port
 		sudo ufw allow from $allowed_ip to any port $allowed_port comment "Allow $allowed_ip to port $allowed_port"
 		read -p "${purple}Add another? (y/n) ${cr}" choice
 		case $choice in

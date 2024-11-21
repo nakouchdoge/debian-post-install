@@ -8,8 +8,6 @@
 - Replaced "touch" with "mkdir" for .ssh directory
 - Removed incorrect wording for firewall rules
 
-### Removed
-
 ## [0.2.2] - 2024-06-18
 
 ### Added

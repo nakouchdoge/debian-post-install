@@ -1,14 +1,12 @@
 # ChangeLog
 
-## [0.2.3] - WIP 
-
-### Added
-
-### Changed
+## [0.2.3] - 2024-11-21 
 
 ### Fixed
 
 - No longer asks to install docker if docker is already installed
+- Replaced "touch" with "mkdir" for .ssh directory
+- Removed incorrect wording for firewall rules
 
 ### Removed
 

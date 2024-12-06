@@ -166,14 +166,14 @@ function echoNeoVimAliases {
 }
 
 function manualDetectNeoVim {
-	if [ -f "/usr/bin/nvim" ] || [ -f "/usr/bin/local/nvim" ]; then
+	if [ -f "/usr/bin/nvim" ] || [ -f "/usr/local/bin/nvim" ]; then
 		detectNeoVim
 	else
 		echo "${red}NeoVIM Install not found.${cr}"
 	fi
 }
 function detectNeoVim {
-	if [ -f "/usr/bin/nvim" ] || [ -f "/usr/bin/local/nvim" ]; then
+	if [ -f "/usr/bin/nvim" ] || [ -f "/usr/local/bin/nvim" ]; then
 		nvimConfig
 		if [ -f "/home/$USER/.bash_aliases" ] && grep -qF "source /home/$USER/.bash_aliases" "/home/$USER/.bashrc" && grep -qF "alias v='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vi='nvim'" "/home/$USER/.bash_aliases" && grep -qF "alias vim='nvim'" "/home/$USER/.bash_aliases"; then
 			:

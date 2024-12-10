@@ -6,7 +6,7 @@ green=$'\e[32m'
 grey=$'\e[90m'
 cr=$'\e[0m'
 
-scriptversion="0.2.2"
+scriptversion="0.2.4"
 
 function ask_yes_no {
 	while true; do

@@ -1,5 +1,11 @@
 # ChangeLog
 
+## [0.2.4] - 2024-12-06
+
+### Changed
+
+- Neovim functions now search in /usr/local/ for applications built from source. 
+
 ## [0.2.3] - 2024-11-21 
 
 ### Fixed

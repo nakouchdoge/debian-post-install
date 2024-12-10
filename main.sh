@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# --- Version 0.2.2 Signed ---
+# --- Version 0.2.3 Signed ---
 # 
 # This is TN. github@nakouchdoge/scripts
 #
